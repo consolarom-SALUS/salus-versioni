@@ -1,0 +1,23 @@
+name: Pubblica la versione
+
+on:
+  push:
+    branches: [main]
+    paths: ['versione.txt']
+
+permissions:
+  contents: write
+
+jobs:
+  pubblica:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Crea la release con il file dell'app
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          N=$(tr -dc '0-9' < versione.txt)
+          gh release create "v$N" "SALUS.apk#SALUS-versione-$N.apk" \
+            --title "SALUS — versione $N" \
+            --notes "Versione di prova dell'app SALUS. Nessun dato personale."
